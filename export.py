@@ -62,18 +62,16 @@ def export_csv():
     return send_file(
         mem,
         as_attachment=True,
-        download_name='logs_export.csv',
+        download_name='logs_export.csv',  # ✅ Correct Flask 2.x+ syntax
         mimetype='text/csv'
     )
-
 
 @dashboard_bp.route('/export/json')
 def export_json():
     events = load_logs()
-
     response = make_response(json.dumps(events, indent=4))
     response.headers['Content-Disposition'] = 'attachment; filename=logs_export.json'
     response.mimetype = 'application/json'
-
     return response
+
 
