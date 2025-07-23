@@ -1,14 +1,20 @@
+# Open app/__init__.py for editing
+# nano app/__init__.py
+
+# Change its content to:
 # app/__init__.py
 from flask import Flask
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_pyfile('../instance/config.py')
 
-    from app.routes import main_bp
-    app.register_blueprint(main_bp)
+    # Import and register the dashboard blueprint
+    # Note the change from 'app.routes' to 'app.routes.dashboard'
+    from app.routes.dashboard import dashboard_bp
+    app.register_blueprint(dashboard_bp)
 
     return app
+
 
 
 
