@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Log Sentinel Dashboard</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+</head>
+<body class="bg-gray-900 text-white font-sans p-6">
+
+<header class="mb-6">
+  <h1 class="text-3xl font-bold mb-2">Log Sentinel - Lightweight SIEM</h1>
+  {% if alert %}
+  <div class="bg-red-600 p-3 rounded">
+    🚨 Alert! {{ suspicious_count }} suspicious events detected.
+  </div>
+  {% else %}
+  <div class="bg-green-600 p-3 rounded">
+    ✅ No alerts detected.
+  </div>
+  {% endif %}
+</header>
+
+<section>
+  <h2 class="text-xl font-semibold mb-2">Recent Logs</h2>
+  <table class="w-full text-sm table-auto border-collapse border border-gray-700">
+    <thead>
+      <tr class="bg-gray-800">
+        <th class="border border-gray-700 p-2">Timestamp</th>
+        <th class="border border-gray-700 p-2">Level</th>
+        <th class="border border-gray-700 p-2">Message</th>
+        <th class="border border-gray-700 p-2">Suspicious</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for event in events %}
+      <tr class="{{ 'bg-red-700' if event.is_suspicious else 'bg-gray-800' }}">
+        <td class="border border-gray-700 p-2">{{ event.timestamp }}</td>
+        <td class="border border-gray-700 p-2">{{ event.level }}</td>
+        <td class="border border-gray-700 p-2">{{ event.message }}</td>
+        <td class="border border-gray-700 p-2 text-center">{{ '⚠️' if event.is_suspicious else '✔️' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section class="mt-6">
+  <h2 class="text-xl font-semibold mb-2">Export Logs</h2>
+  <a href="/export/csv" class="mr-4 text-blue-400 hover:underline">Export CSV</a>
+  <a href="/export/json" class="text-blue-400 hover:underline">Export JSON</a>
+</section>
+
+</body>
+</html>

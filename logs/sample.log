@@ -1,0 +1,4 @@
+2025-07-23 11:00:00,INFO,User logged in
+2025-07-23 11:05:00,ERROR,Failed login attempt
+2025-07-23 11:10:00,WARNING,Unauthorized access detected
+

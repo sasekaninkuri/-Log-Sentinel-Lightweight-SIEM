@@ -1,0 +1,32 @@
+[
+  {
+    "timestamp": "2025-07-22 14:10:05",
+    "level": "INFO",
+    "message": "User login successful for user admin",
+    "is_suspicious": false
+  },
+  {
+    "timestamp": "2025-07-22 14:11:12",
+    "level": "ERROR",
+    "message": "Unauthorized access attempt from 192.168.1.100",
+    "is_suspicious": true
+  },
+  {
+    "timestamp": "2025-07-22 14:15:33",
+    "level": "WARNING",
+    "message": "Disk space low on /dev/sda1",
+    "is_suspicious": false
+  },
+  {
+    "timestamp": "2025-07-22 14:20:47",
+    "level": "INFO",
+    "message": "Scheduled backup completed",
+    "is_suspicious": false
+  },
+  {
+    "timestamp": "2025-07-22 14:25:08",
+    "level": "ERROR",
+    "message": "Failed to write to database",
+    "is_suspicious": true
+  }
+]
