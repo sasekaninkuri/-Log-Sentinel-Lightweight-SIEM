@@ -1,8 +1,6 @@
-# app/__init__.py
-
 from flask import Flask
 from flask_pymongo import PyMongo
-import os # Keep this import here for the debug print statement
+import os
 
 # Initialize PyMongo globally
 mongo = PyMongo()
@@ -11,24 +9,34 @@ def create_app():
     """
     Creates and configures the Flask application.
     """
-    app = Flask(__name__)
+    app = Flask(__name__, instance_relative_config=True)
 
-    # --- DEBUG PRINT STATEMENT (Keep for now to confirm config loads) ---
+    # Ensure instance folder exists
+    try:
+        os.makedirs(app.instance_path, exist_ok=True)
+    except OSError as e:
+        print(f"DEBUG: Could not create instance folder: {e}")
+
+    # Debug statement to confirm config path
     config_path = os.path.join(app.instance_path, 'config.py')
     print(f"DEBUG: Attempting to load config from: {config_path}")
-    # --- END DEBUG PRINT STATEMENT ---
 
-    # Load configuration from instance/config.py
+    # Load configuration from instance/config.py (optional)
     app.config.from_pyfile('config.py', silent=True)
-    # It's good practice to set a SECRET_KEY, especially with Flash messages
-    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or 'your-very-secret-key-replace-me'
+
+    # Set default SECRET_KEY and MONGO_URI if not already set
+    app.config.setdefault('SECRET_KEY', 'super-secure-secret-key')
+    app.config.setdefault('MONGO_URI', 'mongodb://localhost:27017/log_sentinel')
 
     # Initialize PyMongo with the app
     mongo.init_app(app)
 
     # Register Blueprints
     from app.routes.dashboard import dashboard_bp
-    app.register_blueprint(dashboard_bp)
+    from app.routes.dashboard_file import dashboard_file_bp
 
-    # This line is CRITICAL for Flask to find your app factory
+    app.register_blueprint(dashboard_bp)          # MongoDB routes (e.g., /, /export/csv)
+    app.register_blueprint(dashboard_file_bp)     # File-based routes (e.g., /file-dashboard)
+
     return app
+
